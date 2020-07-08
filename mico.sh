@@ -3,7 +3,7 @@
 # 设定拦截词,以竖线分割每个拦截词,被拦截的内容会转发给nodered服务器进行处理
 keywords=""
 # 配置nodered的接收地址
-nodered_url="http://192.168.1.1:1880/miai"
+nodered_url="http://192.168.1.1:1880/endpoint/miai"
 # 配置从nodered更新拦截词的间隔,单位秒
 # 0代表不更新,一直使用本地拦截词
 # 大于0则更新,会从上面设定的nodered_url去获取拦截词,并覆盖本地的拦截词
@@ -60,7 +60,7 @@ while true;do
           echo "== 停止成功"
           break
         fi
-        usleep 50
+        sleep 0
       done
  
       # 记录播放状态并暂停,方便在HA服务器处理逻辑的时候不会插播音乐,0为未播放,1为播放中,2为暂停
@@ -81,7 +81,7 @@ while true;do
         # 最长20秒TTS播报时间,20秒内如果播报完成跳出
         seq 1 20 | while read line;do
           media_type=`ubus -t 1 call mediaplayer player_get_play_status|awk -F 'media_type' '{print $2}'|cut -c 5`
-          if [ "$media_type" -ne "1" ];then
+          if [ "$media_type" != "1" ];then
             echo "== 播报TTS结束"
             break
           fi
@@ -110,5 +110,5 @@ while true;do
         last_time=`date +%s`
     fi
   fi
-  usleep 10
+  sleep 0
 done
