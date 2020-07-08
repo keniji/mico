@@ -81,7 +81,7 @@ while true;do
         # 最长20秒TTS播报时间,20秒内如果播报完成跳出
         seq 1 20 | while read line;do
           media_type=`ubus -t 1 call mediaplayer player_get_play_status|awk -F 'media_type' '{print $2}'|cut -c 5`
-          if [ "$media_type" != "1" ];then
+           if [ "${media_type}" = "" ] || [ "${media_type}" -ne "1" ];then
             echo "== 播报TTS结束"
             break
           fi
